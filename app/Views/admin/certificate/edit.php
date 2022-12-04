@@ -1,0 +1,78 @@
+<main>
+  <div class="container-fluid px-4">
+    <h1 class="mt-4">Edit Certificate</h1>
+    <ol class="breadcrumb mb-4">
+      <li class="breadcrumb-item">Data Certificate</li>
+      <li class="breadcrumb-item active">Edit Certificate</li>
+    </ol>
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-user me-1"></i>
+        Edit Certificate
+      </div>
+      <div class="card-body">
+        <form action="/admin/certificate/<?= $data['id'] ?>" method="post" enctype="multipart/form-data">
+          <?= csrf_field() ?>
+          <input type="hidden" name="_method" value="PUT">
+          <input type="hidden" name="oldImages" value="<?= $data['images'] ?>">
+          <div class="row">
+            <div class="col-6">
+              <div class="mb-3">
+                <div class="row d-flex align-items-center">
+                  <div class="col-6">
+                    <label for="images" class="form-label">Images</label>
+                    <input class="form-control  <?= ($validation->hasError('images')) ? 'is-invalid' : '' ?>" type="file"
+                      id="images" onchange="previewImg()" name="images">
+                    <div class="invalid-feedback">
+                      <?= $validation->getError('images') ?>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <img src="/img/<?= $data['images'] ?>" alt="" style="width: 150px; height: 150px; object-fit: cover;"
+                      id="imgPreview">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="mb-3">
+                <label for="status" class="form-label">Status</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="status" id="active" value="1"
+                    <?= $data['status'] == 1 ? 'checked' : '' ?>>
+                  <label class="form-check-label" for="active">
+                    Active
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="status" id="deactive" value="0"
+                    <?= $data['status'] == 0 ? 'checked' : '' ?>>
+                  <label class="form-check-label" for="deactive">
+                    Deactive
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+function previewImg() {
+  const images = document.querySelector('#images');
+  const imgPreview = document.querySelector('#imgPreview');
+
+  const fileImages = new FileReader();
+  fileImages.readAsDataURL(images.files[0]);
+
+  fileImages.onload = function(e) {
+    imgPreview.src = e.target.result;
+  }
+}
+</script>
